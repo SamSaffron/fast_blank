@@ -1,0 +1,10 @@
+.DS_Store
+.bundle
+public/.DS_Store
+.kdev4
+.rspec
+*.kdev4
+*.swp
+*.kate-swp
+pkg
+vendor/bundle

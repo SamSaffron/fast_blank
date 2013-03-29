@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+$: << File.dirname(__FILE__)+'/lib'
+require 'benchmark'
+require 'fast_blank'
+
+class String
+  # active support implementation
+  def slow_blank?
+    self !~ /[^[:space:]]/
+  end
+end
+n = 1000000
+
+
+strings = [
+  "",
+  "\r\n\r\n  ",
+  "this is a test",
+  "   this is a longer test",
+  "   this is a longer test
+      this is a longer test
+      this is a longer test
+      this is a longer test
+      this is a longer test"
+]
+
+strings.each do |s|
+  raise "failed on #{s.inspect}" if s.blank? != s.slow_blank?
+end
+
+Benchmark.bmbm  do |x|
+  strings.each do |s|
+    x.report("Fast Blank #{s.length}    :") do  n.times { s.blank? }  end
+    x.report("Slow Blank #{s.length}    :") do  n.times { s.slow_blank? }  end
+    x.report("Empty #{s.length}    :") do  n.times { s.empty? }  end
+  end
+end
