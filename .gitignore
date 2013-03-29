@@ -6,5 +6,7 @@ public/.DS_Store
 *.kdev4
 *.swp
 *.kate-swp
+lib/*.so
+tmp/*
 pkg
 vendor/bundle
