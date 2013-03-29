@@ -1,18 +1,19 @@
-= String blank? Ruby Extension
+### String blank? Ruby Extension
 
 +fast_blank+ is a simple extension which provides a fast implementation of active support's string#blank? function
 
-== How do you use it?
+### How do you use it?
 
   require 'fast_blank'
 
-== How fast is "Fast"?
+### How fast is "Fast"?
 
 
 About 5-9x faster than current active support, on my machine (your mileage my vary):
 
   $ ./benchmark
 
+```
                           user     system      total        real
 Fast Blank 0    :     0.070000   0.000000   0.070000 (  0.073033)
 Slow Blank 0    :     0.480000   0.000000   0.480000 (  0.475497)
@@ -24,6 +25,8 @@ Fast Blank 24    :    0.160000   0.000000   0.160000 (  0.162566)
 Slow Blank 24    :    0.870000   0.000000   0.870000 (  0.864067)
 Fast Blank 136    :   0.120000   0.000000   0.120000 (  0.125531)
 Slow Blank 136    :   0.890000   0.000000   0.890000 (  0.889991)
+
+```
 
 
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
