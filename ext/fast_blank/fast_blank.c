@@ -18,13 +18,13 @@ static VALUE
 rb_str_blank(VALUE str)
 {
   rb_encoding *enc;
-  char *s, *t, *e;
+  char *s, *e;
 
   enc = STR_ENC_GET(str);
   s = RSTRING_PTR(str);
   if (!s || RSTRING_LEN(str) == 0) return Qtrue;
 
-  e = t = RSTRING_END(str);
+  e = RSTRING_END(str);
   while (s < e) {
 	  int n;
 	  unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
