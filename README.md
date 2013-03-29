@@ -31,7 +31,7 @@ Slow Blank 136    :   0.890000   0.000000   0.890000 (  0.889991)
 
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
 
-Author::    Sam Saffron (mailto:steve@finagle.org)
+Author::    Sam Saffron (mailto:sam.saffron@gmail.com)
 Website::   http://github.com/SamSaffron/fast_blank
 Copyright:: Copyright (c) 2009-2013 Sam Saffron
 License::   MIT
