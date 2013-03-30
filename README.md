@@ -41,7 +41,7 @@ for example: `"\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200
 
 It is tricky, I can introduce parity with Active Support with little perf loss, but I worry about having an API on String that is inconsistent.
 
-Author: Sam Saffron (sam.saffron@gmail.com)[mailto:sam.saffron@gmail.com]  
+Author: Sam Saffron sam.saffron@gmail.com
 http://github.com/SamSaffron/fast_blank  
 License: MIT
 
