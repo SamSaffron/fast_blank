@@ -13,16 +13,13 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.files = [
     'MIT-LICENSE',
-    'README.rdoc',
+    'README.md',
     'benchmark',
     'lib/.gemkeep',
     'ext/fast_blank/fast_blank.c',
     'ext/fast_blank/extconf.rb',
   ]
   s.test_files = Dir['spec/**/*_spec.rb']
-
-  s.extra_rdoc_files = ['README.rdoc']
-  s.rdoc_options = ['--charset=UTF-8']
 
   s.platform = Gem::Platform::RUBY
   s.rubygems_version = '1.3.7'
