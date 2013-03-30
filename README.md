@@ -1,6 +1,6 @@
 ### String blank? Ruby Extension
 
-+fast_blank+ is a simple extension which provides a fast implementation of active support's string#blank? function
+`fast_blank` is a simple extension which provides a fast implementation of active support's string#blank? function
 
 ### How do you use it?
 
@@ -41,11 +41,9 @@ for example: `"\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200
 
 It is tricky, I can introduce parity with Active Support with little perf loss, but I worry about having an API on String that is inconsistent.
 
-<table>
-<tr><th>Author</th><td>Sam Saffron ((sam.saffron@gmail.com)[mailto:sam.saffron@gmail.com])</td>
-<tr>Website</tr><td>http://github.com/SamSaffron/fast_blank</td>
-<tr>Copyright</tr><td>Copyright (c) 2009-2013 Sam Saffron</td>
-<tr>License</tr><td>MIT</td>
-</table>
+Author: Sam Saffron (sam.saffron@gmail.com)[mailto:sam.saffron@gmail.com]  
+http://github.com/SamSaffron/fast_blank  
+License: MIT
+
 
 (gem template based on https://github.com/CodeMonkeySteve/fast_xor )
