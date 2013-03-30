@@ -4,14 +4,14 @@
 
 ### How do you use it?
 
-  require 'fast_blank'
+    require 'fast_blank'
 
 ### How fast is "Fast"?
 
 
 About 5-9x faster than current active support, on my machine (your mileage my vary):
 
-  $ ./benchmark
+    $ ./benchmark
 
 ```
                           user     system      total        real
@@ -31,9 +31,11 @@ Slow Blank 136    :   0.890000   0.000000   0.890000 (  0.889991)
 
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
 
-Author::    Sam Saffron (mailto:sam.saffron@gmail.com)  
-Website::   http://github.com/SamSaffron/fast_blank  
-Copyright:: Copyright (c) 2009-2013 Sam Saffron  
-License::   MIT  
+<table>
+<tr><th>Author</th><td>Sam Saffron ((sam.saffron@gmail.com)[mailto:sam.saffron@gmail.com])</td>
+<tr>Website</tr><td>http://github.com/SamSaffron/fast_blank</td>
+<tr>Copyright</tr><td>Copyright (c) 2009-2013 Sam Saffron</td>
+<tr>License</tr><td>MIT</td>
+</table>
 
 (gem template based on https://github.com/CodeMonkeySteve/fast_xor )
