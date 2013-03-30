@@ -37,10 +37,9 @@ Additionally, this gem allocates no strings during the test, making it less of a
 fast_blank implements string.blank? as MRI would have it implemented, meaning it has 100% parity with `String#strip.length == 0`. 
 
 Active Supports version looks also at unicode spaces  
-for example: "\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000".blank? is true in Active Support even though fast_blank would treat it as not blank.
+for example: `"\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000".blank?` is true in Active Support even though fast_blank would treat it as not blank.
 
-It is tricky, I can introduce parity with Active Support with little perf loss, but I worry about having an API on string that is inconsistent.
-
+It is tricky, I can introduce parity with Active Support with little perf loss, but I worry about having an API on String that is inconsistent.
 
 <table>
 <tr><th>Author</th><td>Sam Saffron ((sam.saffron@gmail.com)[mailto:sam.saffron@gmail.com])</td>
