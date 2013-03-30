@@ -1,17 +1,17 @@
 ### String blank? Ruby Extension
 
-+fast_blank+ is a simple extension which provides a fast implementation of active support's string#blank? function
+`fast_blank` is a simple extension which provides a fast implementation of active support's string#blank? function
 
 ### How do you use it?
 
-  require 'fast_blank'
+    require 'fast_blank'
 
 ### How fast is "Fast"?
 
 
 About 5-9x faster than current active support, on my machine (your mileage my vary):
 
-  $ ./benchmark
+    $ ./benchmark
 
 ```
                           user     system      total        real
@@ -31,9 +31,19 @@ Slow Blank 136    :   0.890000   0.000000   0.890000 (  0.889991)
 
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
 
-Author::    Sam Saffron (mailto:sam.saffron@gmail.com)  
-Website::   http://github.com/SamSaffron/fast_blank  
-Copyright:: Copyright (c) 2009-2013 Sam Saffron  
-License::   MIT  
+
+###Compatability note: 
+
+fast_blank implements string.blank? as MRI would have it implemented, meaning it has 100% parity with `String#strip.length == 0`. 
+
+Active Supports version looks also at unicode spaces  
+for example: `"\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000".blank?` is true in Active Support even though fast_blank would treat it as not blank.
+
+It is tricky, I can introduce parity with Active Support with little perf loss, but I worry about having an API on String that is inconsistent.
+
+Author: Sam Saffron sam.saffron@gmail.com  
+http://github.com/SamSaffron/fast_blank    
+License: MIT  
+
 
 (gem template based on https://github.com/CodeMonkeySteve/fast_xor )
