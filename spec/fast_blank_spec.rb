@@ -13,14 +13,22 @@ describe String do
     "\r\n".blank?.should == true
     "\r\n\v\f\r\s\u0085".blank? == true
 
-    # weird ass unicode crap
-    #
-    # 1680, 180e, 200B, FEFF is missing from blank?
-    #
-    "\u00A0
-    \u2000\u2001\u2002\u2003\u2004\u2005
-    \u2006\u2007\u2008\u2009\u200A\u202F
-    \u205F\u3000
-    ".blank?.should == true
+  end
+
+  it "provides a parity with active support function" do
+    (16*16*16*16).times do |i|
+      c = i.chr('UTF-8') rescue nil
+      if c
+        "#{i.to_s(16)} #{c.blank_as?}".should == "#{i.to_s(16)} #{c.blank2?}"
+      end
+    end
+
+
+    (256).times do |i|
+      c = i.chr('ASCII') rescue nil
+      if c
+        "#{i.to_s(16)} #{c.blank_as?}".should == "#{i.to_s(16)} #{c.blank2?}"
+      end
+    end
   end
 end

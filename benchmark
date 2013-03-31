@@ -9,6 +9,8 @@ class String
     self !~ /[^[:space:]]/
   end
 end
+
+
 n = 1000000
 
 
@@ -31,7 +33,8 @@ end
 Benchmark.bmbm  do |x|
   strings.each do |s|
     x.report("Fast Blank #{s.length}    :") do  n.times { s.blank? }  end
+    x.report("Fast Blank (Active Support)  #{s.length}    :") do  n.times { s.blank_as? }  end
     x.report("Slow Blank #{s.length}    :") do  n.times { s.slow_blank? }  end
-    x.report("Empty #{s.length}    :") do  n.times { s.empty? }  end
+    #x.report("Empty #{s.length}    :") do  n.times { s.empty? }  end
   end
 end

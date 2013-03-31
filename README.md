@@ -15,16 +15,23 @@ About 5-9x faster than current active support, on my machine (your mileage my va
 
 ```
                           user     system      total        real
-Fast Blank 0    :     0.070000   0.000000   0.070000 (  0.073033)
-Slow Blank 0    :     0.480000   0.000000   0.480000 (  0.475497)
-Fast Blank 6    :     0.150000   0.000000   0.150000 (  0.151790)
-Slow Blank 6    :     0.670000   0.000000   0.670000 (  0.663709)
-Fast Blank 14    :    0.110000   0.000000   0.110000 (  0.115449)
-Slow Blank 14    :    0.880000   0.000000   0.880000 (  0.877265)
-Fast Blank 24    :    0.160000   0.000000   0.160000 (  0.162566)
-Slow Blank 24    :    0.870000   0.000000   0.870000 (  0.864067)
-Fast Blank 136    :   0.120000   0.000000   0.120000 (  0.125531)
-Slow Blank 136    :   0.890000   0.000000   0.890000 (  0.889991)
+                                            user     system      total        real
+Fast Blank 0    :                       0.070000   0.000000   0.070000 (  0.075247)
+Fast Blank (Active Support)  0    :     0.080000   0.000000   0.080000 (  0.075029)
+Slow Blank 0    :                       0.500000   0.000000   0.500000 (  0.503026)
+Fast Blank 6    :                       0.200000   0.000000   0.200000 (  0.191480)
+Fast Blank (Active Support)  6    :     0.180000   0.000000   0.180000 (  0.179891)
+Slow Blank 6    :                       0.660000   0.000000   0.660000 (  0.658604)
+Fast Blank 14    :                      0.080000   0.010000   0.090000 (  0.086371)
+Fast Blank (Active Support)  14    :    0.130000   0.000000   0.130000 (  0.129258)
+Slow Blank 14    :                      0.890000   0.000000   0.890000 (  0.886140)
+Fast Blank 24    :                      0.150000   0.000000   0.150000 (  0.158151)
+Fast Blank (Active Support)  24    :    0.140000   0.000000   0.140000 (  0.149284)
+Slow Blank 24    :                      0.900000   0.000000   0.900000 (  0.899663)
+Fast Blank 136    :                     0.130000   0.000000   0.130000 (  0.125831)
+Fast Blank (Active Support)  136    :   0.150000   0.000000   0.150000 (  0.148948)
+Slow Blank 136    :                     0.900000   0.000000   0.900000 (  0.899885)
+
 
 ```
 
@@ -32,14 +39,15 @@ Slow Blank 136    :   0.890000   0.000000   0.890000 (  0.889991)
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
 
 
-###Compatability note: 
+###Compatability note:
 
-fast_blank implements string.blank? as MRI would have it implemented, meaning it has 100% parity with `String#strip.length == 0`. 
+fast_blank implements string.blank? as MRI would have it implemented, meaning it has 100% parity with `String#strip.length == 0`.
+
 
 Active Supports version looks also at unicode spaces  
 for example: `"\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000".blank?` is true in Active Support even though fast_blank would treat it as not blank.
 
-It is tricky, I can introduce parity with Active Support with little perf loss, but I worry about having an API on String that is inconsistent.
+fast_blank also provides blank_as? which is a 100% compatible blank? replacement.
 
 Author: Sam Saffron sam.saffron@gmail.com  
 http://github.com/SamSaffron/fast_blank    
