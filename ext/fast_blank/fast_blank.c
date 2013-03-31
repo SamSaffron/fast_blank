@@ -69,7 +69,7 @@ rb_str_blank(VALUE str)
 	  int n;
 	  unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
 
-	  if (!rb_isspace(cc)) return Qfalse;
+	  if (!rb_isspace(cc) && cc != 0) return Qfalse;
     s += n;
   }
   return Qtrue;

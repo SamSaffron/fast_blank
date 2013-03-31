@@ -31,4 +31,21 @@ describe String do
       end
     end
   end
+
+  it "has parity with strip.length" do
+    (256).times do |i|
+      c = i.chr('ASCII') rescue nil
+      unless c.nil?
+        "#{i.to_s(16)} #{c.strip.length == 0}".should == "#{i.to_s(16)} #{c.blank?}"
+      end
+    end
+  end
+
+  it "treats \u0000 correctly" do
+    # odd I know
+    "\u0000".strip.length.should == 0
+    "\u0000".blank_as?.should be_false
+    "\u0000".blank?.should be_true
+  end
+
 end
