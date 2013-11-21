@@ -7,7 +7,8 @@ Gem::Specification.new do |s|
 
   s.authors = ['Sam Saffron']
   s.email = 'sam.saffron@gmail.com'
-  s.homepage = ''
+  s.homepage = 'https://github.com/SamSaffron/fast_blank'
+  s.license = 'MIT'
 
   s.extensions = ['ext/fast_blank/extconf.rb']
   s.require_paths = ['lib']
@@ -24,9 +25,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.rubygems_version = '1.3.7'
 
-  s.add_dependency 'rake'
-  s.add_dependency 'rake-compiler'
-
+  s.add_development_dependency 'rake-compiler'
   s.add_development_dependency 'rspec'
 end
 

@@ -13,12 +13,6 @@
 #define RSTRING_LEN(s) (RSTRING(s)->len)
 #endif
 
-const unsigned int as_blank[26] = {9, 0xa, 0xb, 0xc, 0xd,
-  0x20, 0x85, 0xa0, 0x1680, 0x180e, 0x2000, 0x2001,
-  0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008,
-  0x2009, 0x200a, 0x2028, 0x2029, 0x202f, 0x205f, 0x3000
-};
-
 static VALUE
 rb_str_blank_as(VALUE str)
 {
@@ -33,22 +27,41 @@ rb_str_blank_as(VALUE str)
 
   e = RSTRING_END(str);
   while (s < e) {
-	  int n;
-	  unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
+    int n;
+    unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
 
-    found = 0;
-    for(i=0;i<26;i++){
-      unsigned int current = as_blank[i];
-      if(current == cc) {
-        found = 1;
-        break;
-      }
-      if(cc < current){
-        break;
-      }
+    switch (cc) {
+      case 9:
+      case 0xa:
+      case 0xb:
+      case 0xc:
+      case 0xd:
+      case 0x20:
+      case 0x85:
+      case 0xa0:
+      case 0x1680:
+      case 0x180e:
+      case 0x2000:
+      case 0x2001:
+      case 0x2002:
+      case 0x2003:
+      case 0x2004:
+      case 0x2005:
+      case 0x2006:
+      case 0x2007:
+      case 0x2008:
+      case 0x2009:
+      case 0x200a:
+      case 0x2028:
+      case 0x2029:
+      case 0x202f:
+      case 0x205f:
+      case 0x3000:
+          /* found */
+          break;
+      default:
+          return Qfalse;
     }
-
-	  if (!found) return Qfalse;
     s += n;
   }
   return Qtrue;
@@ -66,10 +79,10 @@ rb_str_blank(VALUE str)
 
   e = RSTRING_END(str);
   while (s < e) {
-	  int n;
-	  unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
+    int n;
+    unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
 
-	  if (!rb_isspace(cc) && cc != 0) return Qfalse;
+    if (!rb_isspace(cc) && cc != 0) return Qfalse;
     s += n;
   }
   return Qtrue;
