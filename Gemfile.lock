@@ -2,8 +2,6 @@ PATH
   remote: .
   specs:
     fast_blank (0.0.1)
-      rake
-      rake-compiler
 
 GEM
   remote: https://rubygems.org/
@@ -63,5 +61,7 @@ DEPENDENCIES
   debugger
   fast_blank!
   guard-rspec
+  rake
+  rake-compiler
   rspec
   ruby-debug
