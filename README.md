@@ -53,5 +53,10 @@ Author: Sam Saffron sam.saffron@gmail.com
 http://github.com/SamSaffron/fast_blank    
 License: MIT  
 
+### Change log:
+
+0.0.2:
+  - Removed rake dependency (tmm1)
+  - Unrolled internal loop to improve perf (tmm1)
 
 (gem template based on https://github.com/CodeMonkeySteve/fast_xor )

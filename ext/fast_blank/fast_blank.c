@@ -18,8 +18,6 @@ rb_str_blank_as(VALUE str)
 {
   rb_encoding *enc;
   char *s, *e;
-  int i;
-  int found;
 
   enc = STR_ENC_GET(str);
   s = RSTRING_PTR(str);
