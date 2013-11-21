@@ -33,8 +33,8 @@ rb_str_blank_as(VALUE str)
 
   e = RSTRING_END(str);
   while (s < e) {
-	  int n;
-	  unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
+    int n;
+    unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
 
     found = 0;
     for(i=0;i<26;i++){
@@ -48,7 +48,7 @@ rb_str_blank_as(VALUE str)
       }
     }
 
-	  if (!found) return Qfalse;
+    if (!found) return Qfalse;
     s += n;
   }
   return Qtrue;
@@ -66,10 +66,10 @@ rb_str_blank(VALUE str)
 
   e = RSTRING_END(str);
   while (s < e) {
-	  int n;
-	  unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
+    int n;
+    unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
 
-	  if (!rb_isspace(cc) && cc != 0) return Qfalse;
+    if (!rb_isspace(cc) && cc != 0) return Qfalse;
     s += n;
   }
   return Qtrue;
