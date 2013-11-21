@@ -38,3 +38,20 @@ Benchmark.bmbm  do |x|
     #x.report("Empty #{s.length}    :") do  n.times { s.empty? }  end
   end
 end
+
+                                            user     system      total        real
+# Fast Blank 0    :                       0.050000   0.000000   0.050000 (  0.048928)
+# Fast Blank (Active Support)  0    :     0.050000   0.000000   0.050000 (  0.049967)
+# Slow Blank 0    :                       0.290000   0.000000   0.290000 (  0.295086)
+# Fast Blank 6    :                       0.090000   0.000000   0.090000 (  0.089295)
+# Fast Blank (Active Support)  6    :     0.090000   0.000000   0.090000 (  0.089648)
+# Slow Blank 6    :                       0.420000   0.000000   0.420000 (  0.418375)
+# Fast Blank 14    :                      0.060000   0.000000   0.060000 (  0.056642)
+# Fast Blank (Active Support)  14    :    0.060000   0.000000   0.060000 (  0.061443)
+# Slow Blank 14    :                      0.670000   0.000000   0.670000 (  0.668229)
+# Fast Blank 24    :                      0.070000   0.000000   0.070000 (  0.075878)
+# Fast Blank (Active Support)  24    :    0.090000   0.000000   0.090000 (  0.088610)
+# Slow Blank 24    :                      0.650000   0.000000   0.650000 (  0.650736)
+# Fast Blank 136    :                     0.070000   0.000000   0.070000 (  0.075540)
+# Fast Blank (Active Support)  136    :   0.090000   0.000000   0.090000 (  0.087240)
+# Slow Blank 136    :                     0.660000   0.000000   0.660000 (  0.655168)
