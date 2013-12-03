@@ -1,5 +1,7 @@
 ### String blank? Ruby Extension
 
+[![Gem Version](https://badge.fury.io/rb/fast_blank.png)](http://badge.fury.io/rb/fast_blank) [![Build Status](https://travis-ci.org/gouravtiwari/fast_blank.png?branch=master)](https://travis-ci.org/gouravtiwari/fast_blank)
+
 `fast_blank` is a simple extension which provides a fast implementation of active support's string#blank? function
 
 ### How do you use it?
