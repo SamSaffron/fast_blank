@@ -43,7 +43,7 @@ Additionally, this gem allocates no strings during the test, making it less of a
 
 ###Compatability note:
 
-fast_blank is supported under MRI Ruby 1.9.3, 2.0 and 2.1 (when it is released), earlier versions of MRI are untested.
+fast_blank is supported under MRI Ruby 1.9.3, 2.0 and 2.1, earlier versions of MRI are untested.
 
 fast_blank implements string.blank? as MRI would have it implemented, meaning it has 100% parity with `String#strip.length == 0`.
 
