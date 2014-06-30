@@ -44,8 +44,8 @@ describe String do
   it "treats \u0000 correctly" do
     # odd I know
     expect("\u0000".strip.length).to eq(0)
-    expect("\u0000".blank_as?).to be_false
-    expect("\u0000".blank?).to be_true
+    expect("\u0000".blank_as?).to be_falsey
+    expect("\u0000".blank?).to be_truthy
   end
 
 end
