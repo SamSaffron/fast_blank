@@ -41,7 +41,7 @@ Slow Blank 136    :                     0.900000   0.000000   0.900000 (  0.8998
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
 
 
-###Compatability note:
+###Compatibility note:
 
 fast_blank is supported under MRI Ruby 1.9.3, 2.0 and 2.1, earlier versions of MRI are untested.
 
