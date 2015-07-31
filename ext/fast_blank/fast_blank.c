@@ -2,6 +2,7 @@
 #include <ruby.h>
 #include <ruby/encoding.h>
 #include <ruby/re.h>
+#include <ruby/version.h>
 
 #define STR_ENC_GET(str) rb_enc_from_index(ENCODING_GET(str))
 
@@ -12,6 +13,17 @@
 #ifndef RSTRING_LEN
 #define RSTRING_LEN(s) (RSTRING(s)->len)
 #endif
+
+static int
+ruby_version_before_2_2()
+{
+  #ifdef RUBY_API_VERSION_MAJOR
+  if (RUBY_API_VERSION_MAJOR > 2 || (RUBY_API_VERSION_MAJOR == 2 && RUBY_API_VERSION_MINOR >= 2)) {
+    return 0;
+  }
+  #endif
+  return 1;
+}
 
 static VALUE
 rb_str_blank_as(VALUE str)
@@ -38,7 +50,6 @@ rb_str_blank_as(VALUE str)
       case 0x85:
       case 0xa0:
       case 0x1680:
-      case 0x180e:
       case 0x2000:
       case 0x2001:
       case 0x2002:
@@ -57,6 +68,8 @@ rb_str_blank_as(VALUE str)
       case 0x3000:
           /* found */
           break;
+      case 0x180e:
+          if (ruby_version_before_2_2()) break;
       default:
           return Qfalse;
     }
