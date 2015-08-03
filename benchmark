@@ -6,7 +6,7 @@ require 'fast_blank'
 class String
   # active support implementation
   def slow_blank?
-    self !~ /[^[:space:]]/
+    /\A[[:space:]]*\z/ === self
   end
 end
 
@@ -39,7 +39,7 @@ Benchmark.bmbm  do |x|
   end
 end
 
-                                            user     system      total        real
+#                                           user     system      total        real
 # Fast Blank 0    :                       0.050000   0.000000   0.050000 (  0.048928)
 # Fast Blank (Active Support)  0    :     0.050000   0.000000   0.050000 (  0.049967)
 # Slow Blank 0    :                       0.290000   0.000000   0.290000 (  0.295086)

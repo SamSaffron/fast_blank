@@ -2,7 +2,7 @@ require 'fast_blank'
 
 class ::String
   def blank2?
-    self !~ /[^[:space:]]/
+    /\A[[:space:]]*\z/ === self
   end
 end
 
@@ -12,7 +12,6 @@ describe String do
     expect(" ".blank?).to eq(true)
     expect("\r\n".blank?).to eq(true)
     "\r\n\v\f\r\s\u0085".blank? == true
-
   end
 
   it "provides a parity with active support function" do
