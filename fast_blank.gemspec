@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'fast_blank'
-  s.version = '0.0.2'
-  s.date = '2013-11-22'
+  s.version = '1.0.0'
+  s.date = '2015-08-03'
   s.summary = 'Fast String blank? implementation'
   s.description = 'Provides a C-optimized method for determining if a string is blank'
 
