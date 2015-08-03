@@ -1,5 +1,5 @@
 .DS_Store
-.bundle
+*.bundle
 public/.DS_Store
 .kdev4
 .rspec
