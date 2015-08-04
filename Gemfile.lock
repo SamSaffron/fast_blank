@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fast_blank (0.0.2)
+    fast_blank (1.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -268,4 +268,4 @@ DEPENDENCIES
   rubysl (~> 2.0)
 
 BUNDLED WITH
-   1.10.3
+   1.10.6
