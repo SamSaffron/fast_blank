@@ -1,8 +1,8 @@
-### String blank? Ruby Extension
+### `String#blank?` Ruby Extension
 
 [![Gem Version](https://badge.fury.io/rb/fast_blank.png)](http://badge.fury.io/rb/fast_blank) [![Build Status](https://travis-ci.org/SamSaffron/fast_blank.png?branch=master)](https://travis-ci.org/SamSaffron/fast_blank)
 
-`fast_blank` is a simple extension which provides a fast implementation of active support's string#blank? function
+`fast_blank` is a simple C extension which provides a fast implementation of [Active Support's `String#blank?` method](http://api.rubyonrails.org/classes/String.html#method-i-blank-3F).
 
 ### How do you use it?
 
@@ -10,8 +10,7 @@
 
 ### How fast is "Fast"?
 
-
-About 5-9x faster than current active support, on my machine (your mileage my vary):
+About 3.5–8x faster than Active Support on my machine (your mileage my vary):
 
     $ ./benchmark
 
@@ -34,30 +33,28 @@ Fast Blank (Active Support)  136    :   0.120000   0.000000   0.120000 (  0.1206
 Slow Blank 136    :                     0.540000   0.000000   0.540000 (  0.545197)
 ```
 
-
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
 
+### Compatibility note:
 
-###Compatibility note:
+`fast_blank` supports MRI Ruby 1.9.3, 2.0, 2.1, and 2.2, as well as Rubinius 2.x. Earlier versions of MRI are untested.
 
-fast_blank is supported under MRI Ruby 1.9.3, 2.0 and 2.1, earlier versions of MRI are untested.
+`fast_blank` implements `String#blank?` as MRI would have implemented it, meaning it has 100% parity with `String#strip.length == 0`.
 
-fast_blank implements string.blank? as MRI would have it implemented, meaning it has 100% parity with `String#strip.length == 0`.
+Active Support's version also considers Unicode spaces.  For example, `"\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000".blank?` is true in Active Support even though `fast_blank` would treat it as *not* blank.  Therefore, `fast_blank` also provides `blank_as?` which is a 100%-compatible Active Support `blank?` replacement.
 
+### Credits
 
-Active Supports version looks also at unicode spaces  
-for example: `"\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000".blank?` is true in Active Support even though fast_blank would treat it as not blank.
-
-fast_blank also provides blank_as? which is a 100% compatible blank? replacement.
-
-Author: Sam Saffron sam.saffron@gmail.com  
-http://github.com/SamSaffron/fast_blank    
-License: MIT  
+* Author: Sam Saffron (sam.saffron@gmail.com)
+* https://github.com/SamSaffron/fast_blank
+* License: MIT
+* Gem template based on [CodeMonkeySteve/fast_xor](https://github.com/CodeMonkeySteve/fast_xor)
 
 ### Change log:
 
-0.0.2:
-  - Removed rake dependency (tmm1)
-  - Unrolled internal loop to improve perf (tmm1)
+1.0.0:
+  - Adds Ruby 2.2 support ([@tjschuck](https://github.com/tjschuck) — [#9](https://github.com/SamSaffron/fast_blank/pull/9))
 
-(gem template based on https://github.com/CodeMonkeySteve/fast_xor )
+0.0.2:
+  - Removed rake dependency ([@tmm1](https://github.com/tmm1) — [#2](https://github.com/SamSaffron/fast_blank/pull/2))
+  - Unrolled internal loop to improve perf ([@tmm1](https://github.com/tmm1) — [#2](https://github.com/SamSaffron/fast_blank/pull/2))
