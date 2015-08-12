@@ -6,6 +6,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    benchmark-ips (2.3.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     coderay (1.1.0)
@@ -260,6 +261,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  benchmark-ips
   fast_blank!
   guard-rspec
   rake
