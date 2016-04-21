@@ -6,16 +6,11 @@
 
 #define STR_ENC_GET(str) rb_enc_from_index(ENCODING_GET(str))
 
-static int
-ruby_version_before_2_2()
-{
-  #ifdef RUBY_API_VERSION_MAJOR
-  if (RUBY_API_VERSION_MAJOR > 2 || (RUBY_API_VERSION_MAJOR == 2 && RUBY_API_VERSION_MINOR >= 2)) {
-    return 0;
-  }
-  #endif
-  return 1;
-}
+#ifndef RUBY_API_VERSION_CODE
+# define ruby_version_before_2_2() 1
+#else
+# define ruby_version_before_2_2() (RUBY_API_VERSION_CODE < 20200)
+#endif
 
 static VALUE
 rb_str_blank_as(VALUE str)
@@ -58,10 +53,11 @@ rb_str_blank_as(VALUE str)
       case 0x202f:
       case 0x205f:
       case 0x3000:
+#if ruby_version_before_2_2()
+      case 0x180e:
+#endif
           /* found */
           break;
-      case 0x180e:
-          if (ruby_version_before_2_2()) break;
       default:
           return Qfalse;
     }
