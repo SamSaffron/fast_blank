@@ -6,14 +6,6 @@
 
 #define STR_ENC_GET(str) rb_enc_from_index(ENCODING_GET(str))
 
-/* Backward compatibility with Ruby 1.8 */
-#ifndef RSTRING_PTR
-#define RSTRING_PTR(s) (RSTRING(s)->ptr)
-#endif
-#ifndef RSTRING_LEN
-#define RSTRING_LEN(s) (RSTRING(s)->len)
-#endif
-
 static int
 ruby_version_before_2_2()
 {
