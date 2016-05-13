@@ -8,6 +8,10 @@
 
     require 'fast_blank'
 
+or add it to your Bundler Gemfile
+
+    gem 'fast_blank'
+
 ### How fast is "Fast"?
 
 About 1.2–20x faster than Active Support on my machine (your mileage my vary, depends on string length):
