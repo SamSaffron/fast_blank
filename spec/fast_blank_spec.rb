@@ -1,4 +1,4 @@
-require 'fast_blank'
+require_relative '../ext/fast_blank'
 
 class ::String
   def blank2?
