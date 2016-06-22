@@ -1,6 +1,6 @@
 require 'mkmf'
 
-if find_executable('crystal') && find_executable('llvm-config')
+if ENV['C'].nil? && find_executable('crystal') && find_executable('llvm-config')
   # Dirty patching
   def create_makefile(_, _ = nil)
     cr_makefile = File.join(File.dirname(__FILE__), "../src/Makefile")

@@ -1,3 +1,4 @@
+# copied straight from crystalized_ruby while there is no proper shard (working on it)
 lib LibRuby
   type VALUE = Void*
   type METHOD_FUNC = VALUE -> VALUE
