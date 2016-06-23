@@ -1,8 +1,24 @@
-# exact port from ActiveSupport in Ruby:
-# https://github.com/rails/rails/blob/42b0c942520e59399d70c2170253aa5275a42af1/activesupport/lib/active_support/core_ext/object/blank.rb#L101-L119
-class String
-  BLANK_RE = /\A[[:space:]]*\z/
+# adapted from https://github.com/phoffer/inflector.cr/blob/master/src/inflector/string.cr
+struct Char
+  # activesupport compatible
+  def blank?
+    case ord
+    when 9, 0xa, 0xb, 0xc, 0xd, 0x20, 0x85, 0xa0, 0x1680, 0x180e,
+          0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006,
+          0x2007, 0x2008, 0x2009, 0x200a, 0x2028, 0x2029, 0x202f,
+          0x205f, 0x3000 then true
+    else
+      false
+    end
+  end
 
+  # same way C Ruby implements it
+  def is_blank
+    self == ' ' || ('\t' <= self <= '\r')
+  end
+end
+
+class String
   # A string is blank if it's empty or contains whitespaces only:
   #
   #   ''.blank?       # => true
@@ -15,57 +31,13 @@ class String
   #   "\u00a0".blank? # => true
   #
   # @return [true, false]
-  def slow_blank?
-    BLANK_RE === self
-  end
-
   def blank_as?
     return true if self.nil? || self.size == 0
-    self.each_char do |char|
-      case char
-      when "\u0009",
-        "\u000a",
-        "\u000b",
-        "\u000c",
-        "\u000d",
-        "\u0020",
-        "\u0085",
-        "\u00a0",
-        "\u1680",
-        "\u2000",
-        "\u2001",
-        "\u2002",
-        "\u2003",
-        "\u2004",
-        "\u2005",
-        "\u2006",
-        "\u2007",
-        "\u2008",
-        "\u2009",
-        "\u200a",
-        "\u2028",
-        "\u2029",
-        "\u202f",
-        "\u205f",
-        "\u3000",
-        "\u180e"
-        break
-      else
-        return false
-      end
-    end
-    return true
+    each_char.all? &.blank?
   end
 
   def blank?
     return true if self.nil? || self.size == 0
-    self.each_char do |char|
-      return false if !(is_blank(char) && char != nil)
-    end
-    true
-  end
-
-  private def is_blank(char)
-    char == ' ' || ('\t' <= char <= '\r')
+    each_char.all? &.is_blank
   end
 end
