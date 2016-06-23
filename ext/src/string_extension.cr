@@ -21,9 +21,8 @@ class String
 
   def blank_as?
     return true if self.nil? || self.size == 0
-    i = 0
-    while i < self.size
-      case self[i]
+    self.each_char do |char|
+      case char
       when "\u0009",
         "\u000a",
         "\u000b",
@@ -54,18 +53,14 @@ class String
       else
         return false
       end
-      i += 1
     end
     return true
   end
 
   def blank?
     return true if self.nil? || self.size == 0
-    i = 0
-    while i < self.size
-      char = self[i]
+    self.each_char do |char|
       return false if !(is_blank(char) && char != nil)
-      i += 1
     end
     true
   end
