@@ -37,7 +37,7 @@ all: fast_blank.bundle
 
 fast_blank.bundle: src/cr_fast_blank.cr
 	crystal $^ --release --link-flags "$(CRYSTAL_FLAGS)" -o $@
-	mv cr_fast_blank.bundle fast_blank.bundle
+	mv src/cr_fast_blank.bundle fast_blank.bundle
 
 clean:
 	rm -f *.bundle
