@@ -1,4 +1,5 @@
 require_relative '../ext/fast_blank'
+require 'pry'
 
 class ::String
   def blank2?

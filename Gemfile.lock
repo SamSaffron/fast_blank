@@ -264,10 +264,11 @@ DEPENDENCIES
   benchmark-ips
   fast_blank!
   guard-rspec
+  pry
   rake
   rake-compiler
   rspec
   rubysl (~> 2.0)
 
 BUNDLED WITH
-   1.10.6
+   1.12.5

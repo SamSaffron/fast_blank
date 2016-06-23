@@ -15,13 +15,15 @@ class String
   #   "\u00a0".blank? # => true
   #
   # @return [true, false]
-  def blank?
+  def slow_blank?
     BLANK_RE === self
   end
 
   def blank_as?
-    self.each_char do |char|
-      case char
+    return true if self.nil? || self.size == 0
+    i = 0
+    while i < self.size
+      case self[i]
       when "\u0009",
         "\u000a",
         "\u000b",
@@ -52,7 +54,23 @@ class String
       else
         return false
       end
+      i += 1
     end
     return true
+  end
+
+  def blank?
+    return true if self.nil? || self.size == 0
+    i = 0
+    while i < self.size
+      char = self[i]
+      return false if !(is_blank(char) && char != nil)
+      i += 1
+    end
+    true
+  end
+
+  private def is_blank(char)
+    char == ' ' || ('\t' <= char <= '\r')
   end
 end
