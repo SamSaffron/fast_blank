@@ -1,4 +1,3 @@
-# copied straight from crystalized_ruby while there is no proper shard (working on it)
 lib LibRuby
   type VALUE = Void*
   type METHOD_FUNC = VALUE -> VALUE
@@ -26,6 +25,8 @@ lib LibRuby
   fun rb_str_to_str(value : VALUE) : VALUE
   fun rb_string_value_cstr(value_ptr : VALUE*) : UInt8*
   fun rb_str_new_cstr(str : UInt8*) : VALUE
+  fun rb_utf8_encoding() : VALUE
+  fun rb_enc_str_new_cstr(str : UInt8*, enc : VALUE) : VALUE
 
   fun rb_id2sym(value : ID) : VALUE
   fun rb_intern(name : UInt8*) : ID
@@ -45,22 +46,37 @@ lib LibRuby
   fun rb_hash_foreach(hash : VALUE, callback : (Int32, Void* ->), data : Void*)
   fun rb_hash_keys(hash : VALUE)
 
+  # classes & modules
   fun rb_define_class(name : UInt8*, super : VALUE) : VALUE
+  fun rb_define_class_under(parent : VALUE, name : UInt8*, super : VALUE) : VALUE
   fun rb_define_module(name : UInt8*, super : VALUE) : VALUE
+  fun rb_define_module_under(parent : VALUE, name : UInt8*, super : VALUE) : VALUE
+  
+  # methods
   fun rb_define_method(klass : VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
   fun rb_define_singleton_method(klass : VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
+  fun rb_define_module_function(module : VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
 end
 
 lib LibRuby1
   type METHOD_FUNC = LibRuby::VALUE, LibRuby::VALUE -> LibRuby::VALUE # STUB
   fun rb_define_method(klass : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
   fun rb_define_singleton_method(klass : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
+  fun rb_define_module_function(module : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
 end
 
 lib LibRuby2
   type METHOD_FUNC = LibRuby::VALUE, LibRuby::VALUE, LibRuby::VALUE -> LibRuby::VALUE
   fun rb_define_method(klass : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
   fun rb_define_singleton_method(klass : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
+  fun rb_define_module_function(module : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
+end
+
+lib LibRuby3
+  type METHOD_FUNC = LibRuby::VALUE, LibRuby::VALUE, LibRuby::VALUE, LibRuby::VALUE -> LibRuby::VALUE
+  fun rb_define_method(klass : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
+  fun rb_define_singleton_method(klass : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
+  fun rb_define_module_function(module : LibRuby::VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
 end
 
 module RubyImporter
@@ -77,9 +93,15 @@ module RubyImporter
     # String.from_ruby(key)
     "hi".to_ruby
   end
-# end
-
-# class Object
+  def self.string_symbol_from_ruby(obj : LibRuby::VALUE)
+    klass_name = rb_class(obj) if klass_name == ""
+    case klass_name
+    when "String"
+      String.from_ruby(obj)
+    when "Symbol"
+      RubySymbol.from_ruby(obj)
+    end
+  end
   def self.scalar_from_ruby(obj : LibRuby::VALUE, klass_name : String = "")
     klass_name = rb_class(obj) if klass_name == ""
     case klass_name
@@ -91,6 +113,8 @@ module RubyImporter
       false
     when "String"
       String.from_ruby(obj)
+    when "Symbol"
+      RubySymbol.from_ruby(obj)
     when "Fixnum"
       Int32.from_ruby(obj)
     when "Bignum", "Integer"
@@ -195,7 +219,7 @@ class Hash
     # RubyImporter.import_hash_key do |tick|
     #   puts tick
     # end
-    "hi"
+    {cant: "import ruby hashes"}
   end
 end
 
@@ -209,23 +233,42 @@ struct Bool
   def to_ruby
     Pointer(Void).new(self ? 20_u64 : 0_u64).as(LibRuby::VALUE)
   end
-  def self.from_ruby
-    #
+  def self.from_ruby(obj : LibRuby::VALUE)
+    klass_name = RubyImporter.rb_class(obj)
+    case klass_name
+    when "TrueClass"
+      true
+    when "FalseClass"
+      false
+    end
   end
 end
 
 class String
+  RUBY_UTF = LibRuby.rb_utf8_encoding
   def to_ruby
-    LibRuby.rb_str_new_cstr(self)
+    LibRuby.rb_enc_str_new_cstr(self, RUBY_UTF)
   end
 
   def self.from_ruby(str : LibRuby::VALUE)
     rb_str = LibRuby.rb_str_to_str(str)
     c_str = LibRuby.rb_string_value_cstr(pointerof(rb_str))
-    cr_str = String.new(c_str)
+    cr_str = new(c_str)
   end
 end
 
+# not working as intended
+class RubySymbol < String
+  def to_ruby
+    LibRuby.rb_id2sym(LibRuby.rb_intern(self))
+  end
+  def self.from_ruby(sym : LibRuby::VALUE)
+    str    = LibRuby.rb_funcall(sym, RubyImporter::RB_method_to_s, 0)
+    rb_str = LibRuby.rb_str_to_str(str)
+    c_str  = LibRuby.rb_string_value_cstr(pointerof(rb_str))
+    cr_str = new(c_str)
+  end
+end
 struct Int
   def to_ruby
     LibRuby.rb_int2inum(self)
@@ -252,3 +295,4 @@ struct Float
     to_i.to_ruby
   end
 end
+
