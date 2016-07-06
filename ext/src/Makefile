@@ -18,7 +18,7 @@ all: fast_blank.so
 fast_blank.so: cr_fast_blank.o
 	$(CC) -shared $^ -o $@ $(LIBCRYSTAL) -L$(LIBRARY_PATH) -L$(LIBRUBY) $(LIBS) $(LDFLAGS)
 
-cr_fast_blank.o: src/cr_fast_blank.cr
+cr_fast_blank.o: ../../../../ext/src/cr_fast_blank.cr
 	crystal compile --cross-compile --release --target $(UNAME) $<
 
 .PHONY: clean
@@ -35,7 +35,7 @@ install: all
 
 all: fast_blank.bundle
 
-fast_blank.bundle: src/cr_fast_blank.cr
+fast_blank.bundle: ../../../../ext/src/cr_fast_blank.cr
 	crystal $^ --release --link-flags "$(CRYSTAL_FLAGS)" -o $@
 
 clean:

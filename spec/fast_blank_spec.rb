@@ -1,4 +1,4 @@
-require_relative '../ext/fast_blank'
+require 'fast_blank'
 require 'pry'
 
 class ::String
