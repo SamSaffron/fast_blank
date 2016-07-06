@@ -15,4 +15,9 @@ module StringExtensionWrapper
   rescue
     true.to_ruby
   end
+
+  def self.crystal_value(self : LibRuby::VALUE)
+    str = String.from_ruby(self)
+    str.to_ruby
+  end
 end

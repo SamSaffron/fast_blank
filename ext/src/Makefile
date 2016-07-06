@@ -8,18 +8,18 @@ CRYSTAL_BIN = $(shell readlink -f `which crystal`)
 LIBRARY_PATH = $(shell dirname $(CRYSTAL_BIN))/../embedded/lib
 LIBCRYSTAL = $(shell dirname $(CRYSTAL_BIN) )/../src/ext/libcrystal.a
 LIBRUBY = $(shell ruby -e "puts RbConfig::CONFIG['libdir']")
-LIBS = -levent -lpcre -lgc -lpthread -lrt -ldl
-LDFLAGS = -rdynamic -undefined,dynamic_lookup
+LIBS = -lpcre -lgc -lpthread -levent -lrt -ldl
+LDFLAGS = -rdynamic
 
 install: all
 
 all: fast_blank.so
 
-fast_blank.so: cr_fast_blank.o
-	$(CC) -shared $^ -o $@ $(LIBCRYSTAL) -L$(LIBRARY_PATH) -L$(LIBRUBY) $(LIBS) $(LDFLAGS)
+fast_blank.so: fast_blank.o
+	$(CC) -shared $^ -o $@ $(LIBCRYSTAL) $(LDFLAGS) $(LIBS) -L$(LIBRARY_PATH) -L$(LIBRUBY)
 
-cr_fast_blank.o: ../../../../ext/src/cr_fast_blank.cr
-	crystal compile --cross-compile --release --target $(UNAME) $<
+fast_blank.o: ../../../../ext/src/fast_blank.cr
+	crystal build --cross-compile --release --target $(UNAME) $<
 
 .PHONY: clean
 clean:

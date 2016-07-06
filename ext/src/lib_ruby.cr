@@ -56,6 +56,9 @@ lib LibRuby
   fun rb_define_method(klass : VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
   fun rb_define_singleton_method(klass : VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
   fun rb_define_module_function(module : VALUE, name : UInt8*, func : METHOD_FUNC, argc : Int32)
+
+  # exception handling
+  fun rb_rescue(func : VALUE -> UInt8*, args : VALUE, callback: VALUE -> UInt8*, value: VALUE) : UInt8*
 end
 
 lib LibRuby1
@@ -251,9 +254,20 @@ class String
   end
 
   def self.from_ruby(str : LibRuby::VALUE)
+    c_str = LibRuby.rb_rescue(->String.cr_str_from_rb_cstr, str, ->String.return_empty_string, 0.to_ruby)
+    new(c_str)
+  ensure
+    ""
+  end
+
+  def self.cr_str_from_rb_cstr(str : LibRuby::VALUE)
     rb_str = LibRuby.rb_str_to_str(str)
-    c_str = LibRuby.rb_string_value_cstr(pointerof(rb_str))
-    cr_str = new(c_str)
+    c_str  = LibRuby.rb_string_value_cstr(pointerof(rb_str))
+  end
+
+  def self.return_empty_string(arg : LibRuby::VALUE)
+    a = 0_u8
+    pointerof(a)
   end
 end
 
