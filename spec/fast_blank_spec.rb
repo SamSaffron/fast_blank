@@ -1,4 +1,5 @@
 require 'fast_blank'
+require 'pry'
 
 class ::String
   def blank2?
@@ -35,7 +36,7 @@ describe String do
     (256).times do |i|
       c = i.chr('ASCII') rescue nil
       unless c.nil?
-        expect("#{i.to_s(16)} #{c.strip.length == 0}").to eq("#{i.to_s(16)} #{c.blank?}")
+        expect("#{c} #{c.strip.length == 0}").to eq("#{c} #{c.blank?}")
       end
     end
   end
