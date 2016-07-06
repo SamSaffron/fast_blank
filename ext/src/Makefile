@@ -35,7 +35,7 @@ install: all
 
 all: fast_blank.bundle
 
-fast_blank.bundle: ../../../../ext/src/cr_fast_blank.cr
+fast_blank.bundle: ../../../../ext/src/fast_blank.cr
 	crystal $^ --release --link-flags "$(CRYSTAL_FLAGS)" -o $@
 
 clean:

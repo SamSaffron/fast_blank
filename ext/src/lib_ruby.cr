@@ -31,6 +31,8 @@ lib LibRuby
   fun rb_id2sym(value : ID) : VALUE
   fun rb_intern(name : UInt8*) : ID
 
+  fun rb_str_length(value: VALUE) : Int32
+
   # regexp
   fun rb_reg_new_str(str : VALUE, options : Int32) : VALUE # re.c:2792
 
@@ -255,6 +257,9 @@ class String
 
   def self.from_ruby(str : LibRuby::VALUE)
     c_str = LibRuby.rb_rescue(->String.cr_str_from_rb_cstr, str, ->String.return_empty_string, 0.to_ruby)
+    # FIXME there is still an unhandled problem: then we receive \u0000 from Ruby it raises "string contains null bytes"
+    # so we catch it with rb_rescue, but then we can't generate a Pointer(UInt8) that represents the unicode 0, instead we return a plain blank string
+    # but then the specs fail
     new(c_str)
   ensure
     ""

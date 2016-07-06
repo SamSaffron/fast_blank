@@ -16,7 +16,7 @@ struct Char
 
   # same way C Ruby implements it
   def is_blank
-    self == ' ' || ('\t' <= self <= '\r') || self == '\u0000'
+    self == ' ' || ('\t' <= self <= '\r')
   end
 end
 
@@ -34,13 +34,11 @@ class String
   #
   # @return [true, false]
   def blank_as?
-    return true if self.nil? || self.size == 0
     each_char { |char| return false if !char.blank? }
     return true
   end
 
   def blank?
-    return true if self.nil? || self.size == 0
     each_char { |char| return false if !char.is_blank }
     return true
   end
