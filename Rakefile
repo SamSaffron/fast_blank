@@ -19,3 +19,7 @@ end
 
 task :default => [:compile, :spec]
 
+task :bench => [:compile] do
+  exec './benchmark'
+end
+
