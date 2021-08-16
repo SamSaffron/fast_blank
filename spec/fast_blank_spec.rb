@@ -1,10 +1,17 @@
-require 'fast_blank'
+$VERBOSE = true
 
 class ::String
+  # Stub the original method to make sure it is redefined correctly.
+  def blank?
+    raise NotImplementedError
+  end
+
   def blank2?
     /\A[[:space:]]*\z/ === self
   end
 end
+
+require 'fast_blank'
 
 describe String do
   it "works" do
