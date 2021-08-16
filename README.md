@@ -135,6 +135,9 @@ Active Support's version also considers Unicode spaces.  For example, `"\u2000\u
 
 ### Change log:
 
+1.0.1:
+  - Minor, avoid warnings if redefining blank?
+
 1.0.0:
   - Adds Ruby 2.2 support ([@tjschuck](https://github.com/tjschuck) — [#9](https://github.com/SamSaffron/fast_blank/pull/9))
 
