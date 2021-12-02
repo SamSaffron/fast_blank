@@ -16,7 +16,7 @@ if RUBY_ENGINE == 'jruby'
     ext.source_version = '1.8'
     ext.target_version = '1.8'
   end
-  # Install should compile since it is compiled.
+  # Install should not compile since it is already compiled.
   # Use 'rake compile' if you want to re-compile for development.
   task :default => :spec
 else
