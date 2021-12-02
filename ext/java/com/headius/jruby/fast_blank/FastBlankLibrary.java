@@ -8,6 +8,7 @@ import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.runtime.load.Library;
 import org.jruby.util.ByteList;
+import org.jruby.util.StringSupport;
 import org.jruby.util.io.EncodingUtils;
 
 public class FastBlankLibrary implements Library {
@@ -73,27 +74,37 @@ public class FastBlankLibrary implements Library {
 
     @JRubyMethod(name = "blank?")
     public static IRubyObject blank_p(ThreadContext context, IRubyObject self) {
-        Encoding enc;
-        int s, e;
-        byte[] sBytes;
-
-        Ruby runtime = context.runtime;
-
         RubyString str = (RubyString) self;
-
-        enc = str.getEncoding();
-        ByteList sByteList = str.getByteList();
-        sBytes = sByteList.unsafeBytes();
-        s = sByteList.begin();
 
         if (str.size() == 0) return context.tru;
 
-        e = s + sByteList.realSize();
-        int[] n = {0};
-        while (s < e) {
-            int cc = EncodingUtils.encCodepointLength(runtime, sBytes, s, e, n, enc);
+        ByteList sByteList = str.getByteList();
+        byte[] sBytes = sByteList.unsafeBytes();
+        int s = sByteList.begin();
+        int e = s + sByteList.realSize();
 
-            if (!isSpace(cc) && cc != 0) return context.fals;
+        // Move to slower path if the string contains non 7-bit ASCII.
+        if (str.getCodeRange() != StringSupport.CR_7BIT) return blankSlow(context, sBytes, s, e, str.getEncoding());
+
+        for (int i = s; i < e; i++) {
+            if (!isSpace(sBytes[i])) return context.fals;
+        }
+
+        return context.tru;
+    }
+
+    private static boolean isSpace(byte c) {
+        return c == ' ' || ('\t' <= c && c <= '\r') || c == '\0';
+    }
+
+    private static IRubyObject blankSlow(ThreadContext context, byte[] bytes, int s, int e, Encoding enc) {
+        Ruby runtime = context.runtime;
+        int[] n = {0};
+
+        while (s < e) {
+            int cc = EncodingUtils.encCodepointLength(runtime, bytes, s, e, n, enc);
+
+            if (!isSpaceCodepoint(cc) && cc != 0) return context.fals;
             s += n[0];
         }
 
@@ -101,7 +112,7 @@ public class FastBlankLibrary implements Library {
     }
 
     // MRI: rb_isspace
-    private static boolean isSpace(int codepoint) {
+    private static boolean isSpaceCodepoint(int codepoint) {
         long c = codepoint & 0xFFFFFFFF;
         return c == ' ' || ('\t' <= c && c <= '\r');
     }
