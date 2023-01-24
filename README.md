@@ -1,6 +1,6 @@
 ### `String#blank?` Ruby Extension
 
-[![Gem Version](https://badge.fury.io/rb/fast_blank.png)](http://badge.fury.io/rb/fast_blank) [![Build Status](https://github.com/SamSaffron/fast_blank/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/SamSaffron/fast_blank/actions/workflows/test.yml)
+[![Gem Version](https://badge.fury.io/rb/fast_blank.svg)](http://badge.fury.io/rb/fast_blank) [![Build Status](https://github.com/SamSaffron/fast_blank/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/SamSaffron/fast_blank/actions/workflows/test.yml)
 
 `fast_blank` is a simple C extension which provides a fast implementation of [Active Support's `String#blank?` method](http://api.rubyonrails.org/classes/String.html#method-i-blank-3F).
 
