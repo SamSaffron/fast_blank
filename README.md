@@ -20,100 +20,98 @@ About 1.2–20x faster than Active Support on my machine (your mileage my vary, 
 $ bundle exec ./benchmark
 
 ================== Test String Length: 0 ==================
+Warming up --------------------------------------
+          Fast Blank     2.811M i/100ms
+  Fast ActiveSupport     2.775M i/100ms
+          Slow Blank   319.479k i/100ms
+      New Slow Blank     2.590M i/100ms
 Calculating -------------------------------------
-          Fast Blank   225.251k i/100ms
-  Fast ActiveSupport   225.676k i/100ms
-          Slow Blank   110.934k i/100ms
-      New Slow Blank   221.792k i/100ms
--------------------------------------------------
-          Fast Blank     29.673M (± 2.7%) i/s -    148.215M
-  Fast ActiveSupport     28.249M (± 3.5%) i/s -    141.048M
-          Slow Blank      2.158M (± 3.3%) i/s -     10.872M
-      New Slow Blank     23.558M (± 3.2%) i/s -    117.772M
+          Fast Blank     28.309M (± 0.7%) i/s -    143.355M in   5.064154s
+  Fast ActiveSupport     27.885M (± 0.7%) i/s -    141.517M in   5.075252s
+          Slow Blank      3.209M (± 1.0%) i/s -     16.293M in   5.077717s
+      New Slow Blank     26.017M (± 0.9%) i/s -    132.115M in   5.078494s
 
 Comparison:
-          Fast Blank: 29673200.1 i/s
-  Fast ActiveSupport: 28248894.5 i/s - 1.05x slower
-      New Slow Blank: 23557900.0 i/s - 1.26x slower
-          Slow Blank:  2157787.7 i/s - 13.75x slower
+          Fast Blank: 28309178.6 i/s
+  Fast ActiveSupport: 27884928.2 i/s - 1.02x  slower
+      New Slow Blank: 26016869.2 i/s - 1.09x  slower
+          Slow Blank:  3209138.7 i/s - 8.82x  slower
 
 
 ================== Test String Length: 6 ==================
+Warming up --------------------------------------
+          Fast Blank     1.609M i/100ms
+  Fast ActiveSupport     1.563M i/100ms
+          Slow Blank   278.445k i/100ms
+      New Slow Blank   848.522k i/100ms
 Calculating -------------------------------------
-          Fast Blank   201.185k i/100ms
-  Fast ActiveSupport   205.076k i/100ms
-          Slow Blank   102.061k i/100ms
-      New Slow Blank   123.087k i/100ms
--------------------------------------------------
-          Fast Blank     13.894M (± 2.3%) i/s -     69.409M
-  Fast ActiveSupport     14.627M (± 3.5%) i/s -     73.212M
-          Slow Blank      1.943M (± 2.3%) i/s -      9.798M
-      New Slow Blank      2.796M (± 1.8%) i/s -     14.032M
+          Fast Blank     15.916M (± 1.9%) i/s -     80.437M in   5.056039s
+  Fast ActiveSupport     15.593M (± 1.9%) i/s -     78.128M in   5.012318s
+          Slow Blank      2.894M (± 1.3%) i/s -     14.479M in   5.004609s
+      New Slow Blank      8.521M (± 1.2%) i/s -     43.275M in   5.079181s
 
 Comparison:
-  Fast ActiveSupport: 14627063.7 i/s
-          Fast Blank: 13893631.2 i/s - 1.05x slower
-      New Slow Blank:  2795783.3 i/s - 5.23x slower
-          Slow Blank:  1943025.9 i/s - 7.53x slower
+          Fast Blank: 15915513.5 i/s
+  Fast ActiveSupport: 15592918.2 i/s - same-ish: difference falls within error
+      New Slow Blank:  8521250.6 i/s - 1.87x  slower
+          Slow Blank:  2893641.0 i/s - 5.50x  slower
 
 
 ================== Test String Length: 14 ==================
+Warming up --------------------------------------
+          Fast Blank     2.642M i/100ms
+  Fast ActiveSupport     2.541M i/100ms
+          Slow Blank   616.028k i/100ms
+      New Slow Blank   943.087k i/100ms
 Calculating -------------------------------------
-          Fast Blank   220.004k i/100ms
-  Fast ActiveSupport   219.716k i/100ms
-          Slow Blank   147.399k i/100ms
-      New Slow Blank   106.651k i/100ms
--------------------------------------------------
-          Fast Blank     24.949M (± 3.0%) i/s -    124.742M
-  Fast ActiveSupport     24.491M (± 3.3%) i/s -    122.382M
-          Slow Blank      4.292M (± 1.6%) i/s -     21.520M
-      New Slow Blank      2.115M (± 2.4%) i/s -     10.665M
+          Fast Blank     26.282M (± 0.8%) i/s -    132.078M in   5.025646s
+  Fast ActiveSupport     25.314M (± 1.2%) i/s -    127.038M in   5.019340s
+          Slow Blank      6.094M (± 2.1%) i/s -     30.801M in   5.056336s
+      New Slow Blank      9.414M (± 1.0%) i/s -     47.154M in   5.009560s
 
 Comparison:
-          Fast Blank: 24948558.8 i/s
-  Fast ActiveSupport: 24491245.1 i/s - 1.02x slower
-          Slow Blank:  4292490.5 i/s - 5.81x slower
-      New Slow Blank:  2115097.6 i/s - 11.80x slower
+          Fast Blank: 26282498.1 i/s
+  Fast ActiveSupport: 25313579.3 i/s - 1.04x  slower
+      New Slow Blank:  9413905.4 i/s - 2.79x  slower
+          Slow Blank:  6094343.2 i/s - 4.31x  slower
 
 
 ================== Test String Length: 24 ==================
+Warming up --------------------------------------
+          Fast Blank     1.945M i/100ms
+  Fast ActiveSupport     1.899M i/100ms
+          Slow Blank   550.633k i/100ms
+      New Slow Blank   788.512k i/100ms
 Calculating -------------------------------------
-          Fast Blank   206.555k i/100ms
-  Fast ActiveSupport   208.513k i/100ms
-          Slow Blank   137.733k i/100ms
-      New Slow Blank   101.215k i/100ms
--------------------------------------------------
-          Fast Blank     16.761M (± 2.7%) i/s -     83.861M
-  Fast ActiveSupport     17.710M (± 3.2%) i/s -     88.618M
-          Slow Blank      3.744M (± 2.0%) i/s -     18.732M
-      New Slow Blank      1.962M (± 2.7%) i/s -      9.818M
+          Fast Blank     19.399M (± 1.0%) i/s -     97.259M in   5.014145s
+  Fast ActiveSupport     18.903M (± 0.7%) i/s -     94.958M in   5.023799s
+          Slow Blank      5.486M (± 1.0%) i/s -     27.532M in   5.019220s
+      New Slow Blank      7.772M (± 1.3%) i/s -     39.426M in   5.073728s
 
 Comparison:
-  Fast ActiveSupport: 17709936.5 i/s
-          Fast Blank: 16760839.7 i/s - 1.06x slower
-          Slow Blank:  3744048.4 i/s - 4.73x slower
-      New Slow Blank:  1961831.1 i/s - 9.03x slower
+          Fast Blank: 19399137.3 i/s
+  Fast ActiveSupport: 18902692.5 i/s - 1.03x  slower
+      New Slow Blank:  7771936.7 i/s - 2.50x  slower
+          Slow Blank:  5485855.2 i/s - 3.54x  slower
 
 
 ================== Test String Length: 136 ==================
+Warming up --------------------------------------
+          Fast Blank     1.937M i/100ms
+  Fast ActiveSupport     1.885M i/100ms
+          Slow Blank   549.012k i/100ms
+      New Slow Blank   790.087k i/100ms
 Calculating -------------------------------------
-          Fast Blank   201.772k i/100ms
-  Fast ActiveSupport   189.120k i/100ms
-          Slow Blank   129.439k i/100ms
-      New Slow Blank    90.677k i/100ms
--------------------------------------------------
-          Fast Blank     16.718M (± 2.8%) i/s -     83.534M
-  Fast ActiveSupport     17.617M (± 3.6%) i/s -     87.941M
-          Slow Blank      3.725M (± 3.0%) i/s -     18.639M
-      New Slow Blank      1.940M (± 4.8%) i/s -      9.702M
+          Fast Blank     19.401M (± 0.6%) i/s -     98.807M in   5.093149s
+  Fast ActiveSupport     18.916M (± 1.0%) i/s -     96.139M in   5.082984s
+          Slow Blank      5.491M (± 1.0%) i/s -     28.000M in   5.099366s
+      New Slow Blank      7.864M (± 0.6%) i/s -     39.504M in   5.023416s
 
 Comparison:
-  Fast ActiveSupport: 17616782.1 i/s
-          Fast Blank: 16718307.8 i/s - 1.05x slower
-          Slow Blank:  3725097.6 i/s - 4.73x slower
-      New Slow Blank:  1940271.2 i/s - 9.08x slower
-
-
+          Fast Blank: 19400820.9 i/s
+  Fast ActiveSupport: 18915679.7 i/s - 1.03x  slower
+      New Slow Blank:  7864288.1 i/s - 2.47x  slower
+          Slow Blank:  5491367.9 i/s - 3.53x  slower
 ```
 
 Additionally, this gem allocates no strings during the test, making it less of a GC burden.
