@@ -12,115 +12,42 @@ or add it to your Bundler Gemfile
 
     gem 'fast_blank'
 
+`fast_blank` must be loaded **after** Active Support: `require 'active_support/core_ext/object/blank'` defines its own `String#blank?` and silently replaces the one from `fast_blank` if it comes second.
+
 ### How fast is "Fast"?
 
-About 1.2–20x faster than Active Support on my machine (your mileage my vary, depends on string length):
+Speed relative to Active Support 8.1.4's `String#blank?` (above 1x is faster):
 
-```
-$ bundle exec ./benchmark
+| String | MRI `blank?` | MRI `blank_as?` | JRuby `blank?` | JRuby `blank_as?` | TruffleRuby `blank?` | TruffleRuby `blank_as?` |
+|---|---|---|---|---|---|---|
+| `""` | 1.08x | 1.07x | 1.07x | 1.01x | 1.05x | 1.02x |
+| 6 blanks | 3.00x | 3.00x | 1.51x | 1.54x | 0.93x | 0.99x |
+| 14 chars of text | 3.31x | 3.31x | 1.51x | 1.40x | 1.06x | 0.98x |
+| 24 chars, leading blanks | 3.84x | 3.80x | 1.63x | 1.58x | 1.11x | 0.97x |
+| 136 chars, multi-line text | 3.80x | 3.82x | 1.66x | 1.62x | 1.11x | 0.97x |
+| 136 spaces | 5.29x | 6.34x | 6.32x | 5.75x | 0.87x | 1.00x |
+| Unicode blanks | 3.29x | 2.19x | 1.56x | 1.32x | 2.01x | 0.99x |
+| Unicode text | 3.04x | 2.98x | 1.40x | 1.49x | 1.11x | 0.98x |
 
-================== Test String Length: 0 ==================
-Calculating -------------------------------------
-          Fast Blank   225.251k i/100ms
-  Fast ActiveSupport   225.676k i/100ms
-          Slow Blank   110.934k i/100ms
-      New Slow Blank   221.792k i/100ms
--------------------------------------------------
-          Fast Blank     29.673M (± 2.7%) i/s -    148.215M
-  Fast ActiveSupport     28.249M (± 3.5%) i/s -    141.048M
-          Slow Blank      2.158M (± 3.3%) i/s -     10.872M
-      New Slow Blank     23.558M (± 3.2%) i/s -    117.772M
+Measured on arm64 macOS with MRI 4.0.7, JRuby 10.1.2.0 (OpenJDK 25.0.2) and TruffleRuby 40.0.0, one process per method and string, each calling the method directly on 64 distinct copies of the string so that no JIT can fold the call. On TruffleRuby `fast_blank` uses plain Ruby (see the compatibility note), hence on-par results.
 
-Comparison:
-          Fast Blank: 29673200.1 i/s
-  Fast ActiveSupport: 28248894.5 i/s - 1.05x slower
-      New Slow Blank: 23557900.0 i/s - 1.26x slower
-          Slow Blank:  2157787.7 i/s - 13.75x slower
+Memory: neither `fast_blank` nor Active Support 8.1.4 allocates on MRI (0 objects per 100,000 calls). On JRuby `fast_blank` allocates nothing, while Active Support allocates about 208 bytes per call, and about 4 KB per call on a string of 136 spaces.
 
+To reproduce the table on your machine (it prints one engine's columns):
 
-================== Test String Length: 6 ==================
-Calculating -------------------------------------
-          Fast Blank   201.185k i/100ms
-  Fast ActiveSupport   205.076k i/100ms
-          Slow Blank   102.061k i/100ms
-      New Slow Blank   123.087k i/100ms
--------------------------------------------------
-          Fast Blank     13.894M (± 2.3%) i/s -     69.409M
-  Fast ActiveSupport     14.627M (± 3.5%) i/s -     73.212M
-          Slow Blank      1.943M (± 2.3%) i/s -      9.798M
-      New Slow Blank      2.796M (± 1.8%) i/s -     14.032M
+    bundle config set --local with bench   # installs Active Support, an optional group
+    bundle install
+    bundle exec rake bench:activesupport
 
-Comparison:
-  Fast ActiveSupport: 14627063.7 i/s
-          Fast Blank: 13893631.2 i/s - 1.05x slower
-      New Slow Blank:  2795783.3 i/s - 5.23x slower
-          Slow Blank:  1943025.9 i/s - 7.53x slower
-
-
-================== Test String Length: 14 ==================
-Calculating -------------------------------------
-          Fast Blank   220.004k i/100ms
-  Fast ActiveSupport   219.716k i/100ms
-          Slow Blank   147.399k i/100ms
-      New Slow Blank   106.651k i/100ms
--------------------------------------------------
-          Fast Blank     24.949M (± 3.0%) i/s -    124.742M
-  Fast ActiveSupport     24.491M (± 3.3%) i/s -    122.382M
-          Slow Blank      4.292M (± 1.6%) i/s -     21.520M
-      New Slow Blank      2.115M (± 2.4%) i/s -     10.665M
-
-Comparison:
-          Fast Blank: 24948558.8 i/s
-  Fast ActiveSupport: 24491245.1 i/s - 1.02x slower
-          Slow Blank:  4292490.5 i/s - 5.81x slower
-      New Slow Blank:  2115097.6 i/s - 11.80x slower
-
-
-================== Test String Length: 24 ==================
-Calculating -------------------------------------
-          Fast Blank   206.555k i/100ms
-  Fast ActiveSupport   208.513k i/100ms
-          Slow Blank   137.733k i/100ms
-      New Slow Blank   101.215k i/100ms
--------------------------------------------------
-          Fast Blank     16.761M (± 2.7%) i/s -     83.861M
-  Fast ActiveSupport     17.710M (± 3.2%) i/s -     88.618M
-          Slow Blank      3.744M (± 2.0%) i/s -     18.732M
-      New Slow Blank      1.962M (± 2.7%) i/s -      9.818M
-
-Comparison:
-  Fast ActiveSupport: 17709936.5 i/s
-          Fast Blank: 16760839.7 i/s - 1.06x slower
-          Slow Blank:  3744048.4 i/s - 4.73x slower
-      New Slow Blank:  1961831.1 i/s - 9.03x slower
-
-
-================== Test String Length: 136 ==================
-Calculating -------------------------------------
-          Fast Blank   201.772k i/100ms
-  Fast ActiveSupport   189.120k i/100ms
-          Slow Blank   129.439k i/100ms
-      New Slow Blank    90.677k i/100ms
--------------------------------------------------
-          Fast Blank     16.718M (± 2.8%) i/s -     83.534M
-  Fast ActiveSupport     17.617M (± 3.6%) i/s -     87.941M
-          Slow Blank      3.725M (± 3.0%) i/s -     18.639M
-      New Slow Blank      1.940M (± 4.8%) i/s -      9.702M
-
-Comparison:
-  Fast ActiveSupport: 17616782.1 i/s
-          Fast Blank: 16718307.8 i/s - 1.05x slower
-          Slow Blank:  3725097.6 i/s - 4.73x slower
-      New Slow Blank:  1940271.2 i/s - 9.08x slower
-
-
-```
-
-Additionally, this gem allocates no strings during the test, making it less of a GC burden.
+`bundle exec rake bench` compiles the extension and runs `./benchmark`, which checks `blank?` and `blank_as?` against two regexp-based implementations.
 
 ### Compatibility note:
 
-`fast_blank` supports MRI Ruby 1.9.3, 2.0, 2.1, and 2.2, as well as Rubinius 2.x. Earlier versions of MRI are untested.
+CI runs the test suite on MRI 2.0 to 4.0, JRuby and TruffleRuby.
+
+* **MRI** uses the C extension.
+* **JRuby** uses the Java extension shipped as `lib/fast_blank.jar`. It is compiled to Java 8 bytecode so that the same jar also loads on JRuby 9.4.
+* **TruffleRuby** neither builds nor loads the C extension: TruffleRuby runs C extensions through an emulation layer that made both methods slower than Active Support, so they are implemented in Ruby there, with the same semantics.
 
 `fast_blank` implements `String#blank?` as MRI would have implemented it, meaning it has 100% parity with `String#strip.length == 0`.
 
@@ -134,6 +61,13 @@ Active Support's version also considers Unicode spaces.  For example, `"\u2000\u
 * Gem template based on [CodeMonkeySteve/fast_xor](https://github.com/CodeMonkeySteve/fast_xor)
 
 ### Change log:
+
+Unreleased:
+  - Fix `blank_as?` in non-Unicode encodings (Windows-1252, ISO-8859-*, binary…), where bytes such as `0x85` and `0xA0` were compared to Unicode code points and visible characters were reported as blank
+  - JRuby: 7-bit fast path for `blank_as?` too (it was already there for `blank?`), also taken when the code range has not been computed yet
+  - 7-bit fast path in the C extension (`blank?` and `blank_as?`)
+  - Pure-Ruby implementation on TruffleRuby instead of the C extension, which is no longer built there
+  - The C extension can be used from non-main Ractors
 
 1.0.1:
   - Minor, avoid warnings if redefining blank?

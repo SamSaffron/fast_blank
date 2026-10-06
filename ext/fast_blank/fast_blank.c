@@ -1,7 +1,5 @@
-#include <stdio.h>
 #include <ruby.h>
 #include <ruby/encoding.h>
-#include <ruby/re.h>
 #include <ruby/version.h>
 
 #define STR_ENC_GET(str) rb_enc_from_index(ENCODING_GET(str))
@@ -12,20 +10,52 @@
 # define ruby_version_before_2_2() (RUBY_API_VERSION_CODE < 20200)
 #endif
 
+/* Fast path for 7-bit strings in ASCII-compatible encodings: every byte is a
+   whole character, so no code point decoding is needed. */
+static int
+str_ascii_only_p(VALUE str, rb_encoding *enc)
+{
+  return rb_enc_asciicompat(enc) && rb_enc_str_coderange(str) == ENC_CODERANGE_7BIT;
+}
+
+static VALUE
+ascii_blank(const char *s, const char *e, int nul_is_blank)
+{
+  for (; s < e; s++) {
+    if (!rb_isspace((unsigned char)*s) && !(nul_is_blank && *s == '\0')) return Qfalse;
+  }
+  return Qtrue;
+}
+
 static VALUE
 rb_str_blank_as(VALUE str)
 {
   rb_encoding *enc;
   char *s, *e;
+  int unicode;
 
   enc = STR_ENC_GET(str);
   s = RSTRING_PTR(str);
-  if (!s || RSTRING_LEN(str) == 0) return Qtrue;
+  if (RSTRING_LEN(str) == 0) return Qtrue;
+  if (str_ascii_only_p(str, enc)) return ascii_blank(s, RSTRING_END(str), 0);
+
+  /* The table below lists Unicode code points; in any other encoding a code
+     is only meaningful to that encoding's own ctype table, which is what
+     Active Support's /[[:space:]]/ consults. */
+  unicode = rb_enc_unicode_p(enc);
 
   e = RSTRING_END(str);
   while (s < e) {
     int n;
     unsigned int cc = rb_enc_codepoint_len(s, e, &n, enc);
+
+    if (!unicode) {
+      /* rb_enc_isspace() also accepts some multibyte codes (Emacs-Mule,
+         stateless-ISO-2022-JP) that /[[:space:]]/ does not match. */
+      if (n > 1 || !rb_enc_isspace(cc, enc)) return Qfalse;
+      s += n;
+      continue;
+    }
 
     switch (cc) {
       case 9:
@@ -74,7 +104,8 @@ rb_str_blank(VALUE str)
 
   enc = STR_ENC_GET(str);
   s = RSTRING_PTR(str);
-  if (!s || RSTRING_LEN(str) == 0) return Qtrue;
+  if (RSTRING_LEN(str) == 0) return Qtrue;
+  if (str_ascii_only_p(str, enc)) return ascii_blank(s, RSTRING_END(str), 1);
 
   e = RSTRING_END(str);
   while (s < e) {
@@ -90,6 +121,10 @@ rb_str_blank(VALUE str)
 
 void Init_fast_blank( void )
 {
+  /* Both methods are pure functions of their receiver, with no global state. */
+#ifdef HAVE_RB_EXT_RACTOR_SAFE
+  rb_ext_ractor_safe(true);
+#endif
   rb_define_method(rb_cString, "blank?", rb_str_blank, 0);
   rb_define_method(rb_cString, "blank_as?", rb_str_blank_as, 0);
 }

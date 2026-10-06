@@ -10,3 +10,4 @@ lib/*.so
 tmp/*
 pkg
 vendor/bundle
+Gemfile.lock

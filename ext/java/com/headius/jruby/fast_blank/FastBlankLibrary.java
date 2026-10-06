@@ -11,6 +11,12 @@ import org.jruby.util.ByteList;
 import org.jruby.util.StringSupport;
 import org.jruby.util.io.EncodingUtils;
 
+// defineAnnotatedMethods(Class) and encCodepointLength(Ruby, ...) are deprecated
+// in JRuby 10, but their replacements (defineMethods(ThreadContext, ...),
+// encCodepointLength(ThreadContext, ...)) do not exist in JRuby 9.4, and the
+// overload without a runtime throws a Java IllegalArgumentException instead of
+// a Ruby ArgumentError on invalid bytes. Kept so one jar serves JRuby 9.4 and 10.
+@SuppressWarnings("deprecation")
 public class FastBlankLibrary implements Library {
     public void load(Ruby runtime, boolean wrap) {
         runtime.getString().defineAnnotatedMethods(FastBlankLibrary.class);
@@ -32,9 +38,30 @@ public class FastBlankLibrary implements Library {
         if (str.size() == 0) return context.tru;
 
         e = s + sByteList.realSize();
+
+        // Fast path for 7-bit strings in ASCII-compatible encodings, as in blank?,
+        // except that NUL is not blank here. scanForCodeRange() computes the code
+        // range when getCodeRange() would still report it as unknown.
+        if (enc.isAsciiCompatible() && str.scanForCodeRange() == StringSupport.CR_7BIT) {
+            for (int i = s; i < e; i++) {
+                if (sBytes[i] == 0 || !isSpace(sBytes[i])) return context.fals;
+            }
+            return context.tru;
+        }
+
+        // The table below lists Unicode code points; in any other encoding a code
+        // is only meaningful to that encoding's own ctype table, which is what
+        // Active Support's /[[:space:]]/ consults.
+        boolean unicode = enc.isUnicode();
         int[] n = {0};
         while (s < e) {
             int cc = EncodingUtils.encCodepointLength(runtime, sBytes, s, e, n, enc);
+
+            if (!unicode) {
+                if (!enc.isSpace(cc)) return context.fals;
+                s += n[0];
+                continue;
+            }
 
             switch (cc) {
                 case 9:
@@ -84,7 +111,7 @@ public class FastBlankLibrary implements Library {
         int e = s + sByteList.realSize();
 
         // Move to slower path if the string contains non 7-bit ASCII.
-        if (str.getCodeRange() != StringSupport.CR_7BIT) return blankSlow(context, sBytes, s, e, str.getEncoding());
+        if (str.scanForCodeRange() != StringSupport.CR_7BIT) return blankSlow(context, sBytes, s, e, str.getEncoding());
 
         for (int i = s; i < e; i++) {
             if (!isSpace(sBytes[i])) return context.fals;
@@ -113,7 +140,6 @@ public class FastBlankLibrary implements Library {
 
     // MRI: rb_isspace
     private static boolean isSpaceCodepoint(int codepoint) {
-        long c = codepoint & 0xFFFFFFFF;
-        return c == ' ' || ('\t' <= c && c <= '\r');
+        return codepoint == ' ' || ('\t' <= codepoint && codepoint <= '\r');
     }
 }
